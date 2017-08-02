@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"strconv"
-	"strings"
 	"unicode"
 	"unicode/utf8"
+	"io"
 )
 
 const (
@@ -41,17 +40,10 @@ func (seg *Segmenter) Dictionary() *Dictionary {
 //
 // 词典的格式为（每个分词一行）：
 //	分词文本 频率 词性
-func (seg *Segmenter) LoadDictionary(files string) {
+func (seg *Segmenter) LoadDictionary(rs []io.Reader) {
 	seg.dict = NewDictionary()
-	for _, file := range strings.Split(files, ",") {
-		log.Printf("载入sego词典 %s", file)
-		dictFile, err := os.Open(file)
-		defer dictFile.Close()
-		if err != nil {
-			log.Fatalf("无法载入字典文件 \"%s\" \n", file)
-		}
-
-		reader := bufio.NewReader(dictFile)
+	for _, r := range rs {
+		reader := bufio.NewReader(r)
 		var text string
 		var freqText string
 		var frequency int
