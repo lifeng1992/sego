@@ -40,7 +40,7 @@ func (seg *Segmenter) Dictionary() *Dictionary {
 //
 // 词典的格式为（每个分词一行）：
 //	分词文本 频率 词性
-func (seg *Segmenter) LoadDictionary(rs []io.Reader) {
+func (seg *Segmenter) LoadDictionary(rs ...io.Reader) {
 	seg.dict = NewDictionary()
 	for _, r := range rs {
 		reader := bufio.NewReader(r)
