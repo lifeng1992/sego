@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"log"
 
-	"github.com/adamzy/sego"
+	"github.com/lifeng1992/sego"
 )
 
 var (
@@ -15,7 +17,11 @@ func main() {
 	flag.Parse()
 
 	var seg sego.Segmenter
-	seg.LoadDictionary("../data/dictionary.txt")
+	b, err := ioutil.ReadFile("./dictionary.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	seg.LoadDictionary(b)
 
 	segments := seg.Segment([]byte(*text))
 	fmt.Println(sego.SegmentsToString(segments, true))
